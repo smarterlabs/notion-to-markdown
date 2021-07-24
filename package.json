@@ -1,0 +1,41 @@
+{
+  "name": "notion-to-markdown",
+  "version": "1.0.0",
+  "repository": "git@github.com:smarterlabs/notion-to-markdown.git",
+  "author": "Kennedy Rose <kennedyianrose@gmail.com>",
+  "private": true,
+  "scripts": {
+    "build": "yarn run clean && cd packages/orchestration && dotenv -e ../../.env -- npm run build",
+    "clean": "del dist",
+    "start": "node packages/notion-to-markdown/src/index.js",
+    "serve": "serve dist",
+    "stop": "sudo killall -9 node",
+    "version": "lerna version"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "**/*.js": [
+      "eslint --fix"
+    ]
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "@babel/cli": "^7.8.3",
+    "@babel/core": "^7.8.3",
+    "@smarterlabs/babel-preset": "^1.0.8",
+    "@smarterlabs/eslint-config": "^1.0.7",
+    "del-cli": "^4.0.0",
+    "dotenv-cli": "^4.0.0",
+    "eslint": "^7.30.0",
+    "husky": "^4.2.0",
+    "lerna": "^3.22.1",
+    "lint-staged": "^11.0.0",
+    "serve": "^12.0.0"
+  }
+}

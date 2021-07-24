@@ -1,0 +1,19 @@
+{
+  "name": "@app/notion-to-markdown",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "node src/index",
+    "serve": "serve dist"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.10",
+    "fs-extra": "^10.0.0",
+    "puppeteer": "^10.1.0",
+    "turndown": "^7.1.1"
+  },
+  "devDependencies": {
+    "del-cli": "^4.0.0",
+    "serve": "^12.0.0"
+  }
+}
