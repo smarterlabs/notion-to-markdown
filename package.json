@@ -7,7 +7,7 @@
   "scripts": {
     "build": "yarn run clean && cd packages/orchestration && dotenv -e ../../.env -- npm run build",
     "clean": "del dist",
-    "start": "node packages/notion-to-markdown/src/index.js",
+    "start": "dotenv -e ./.env -- node packages/notion-to-markdown/src/index.js",
     "serve": "serve dist",
     "stop": "sudo killall -9 node",
     "version": "lerna version"

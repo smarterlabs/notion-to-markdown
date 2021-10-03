@@ -2,15 +2,17 @@
   "name": "@app/notion-to-markdown",
   "version": "1.0.0",
   "main": "src/index.js",
+  "type": "module",
   "scripts": {
     "build": "node src/index",
     "serve": "serve dist"
   },
   "dependencies": {
-    "cheerio": "^1.0.0-rc.10",
+    "@notionhq/client": "^0.2.3",
     "fs-extra": "^10.0.0",
-    "puppeteer": "^10.1.0",
-    "turndown": "^7.1.1"
+    "lodash": "^4.17.21",
+    "notion-content-render": "^1.0.0",
+    "notion-markdown": "0.0.1"
   },
   "devDependencies": {
     "del-cli": "^4.0.0",
