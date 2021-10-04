@@ -80,6 +80,7 @@ module.exports = async (req, res) => {
   const html = []
 
   contents.forEach(block => {
+    if(!block.properties) block.properties = {}
     const type = block.type
 
     if(["header", "sub_header", "sub_sub_header", "text"].includes(type)) {
@@ -108,7 +109,7 @@ module.exports = async (req, res) => {
     } else if(["to_do"].includes(type)) {
       /* To do list represented by a list of checkbox inputs */
       const checked = Boolean(block.properties.checked)
-      html.push(`<div class="checklist"><label><input type="checkbox" disabled${checked ? " checked" : ""}>${textArrayToHtml(block.properties.title)}</label></div>`)
+      html.push(`<div class="checklist"><label><input type="checkbox" disabled${checked ? " checked" : ""} />${textArrayToHtml(block.properties.title)}</label></div>`)
     } else if(["code"].includes(type)) {
       /* Full code blocks with language */
       const language = block.properties.language[0][0].toLowerCase().replace(/ /g, "")
@@ -134,13 +135,13 @@ module.exports = async (req, res) => {
       const color = block.format.block_color.split("_")[0]
       const isBackground = block.format.block_color.split("_").length > 1
       const text = block.properties.title
-      html.push(`<div class="callout${isBackground ? " background" : " color"}-${color}"><img src="${imageLink}"><p>${textArrayToHtml(text)}</p></div>`)
+      html.push(`<div class="callout${isBackground ? " background" : " color"}-${color}"><img src="${imageLink}" /><p>${textArrayToHtml(text)}</p></div>`)
     } else if(["quote"].includes(type)) {
       html.push(`<blockquote>${textArrayToHtml(block.properties.title)}</blockquote>`)
     } else if(["divider"].includes(type)) {
       html.push(`<hr>`)
     } else if(["image"].includes(type)) {
-      html.push(`<img src="https://www.notion.so/image/${encodeURIComponent(block.format.display_source)}?table=block&id=${block.id}">`)
+      html.push(`<img src="https://www.notion.so/image/${encodeURIComponent(block.format.display_source)}?table=block&id=${block.id}" />`)
     } else if(["equation"].includes(type)) {
       if(!block.properties) {
         // Equation block is empty
