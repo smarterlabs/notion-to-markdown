@@ -79,6 +79,8 @@ module.exports = async (req, res) => {
 
   const html = []
 
+  console.log(`contents`, JSON.stringify(contents, null, 3))
+
   contents.forEach(block => {
     if(!block.properties) block.properties = {}
     const type = block.type
@@ -170,5 +172,8 @@ module.exports = async (req, res) => {
                         .replace(/<\/ol><ol>/g, "")
                         .replace(/<\/ul><ul>/g, "")
                         .replace(/<\/div><div class="checklist">/g, "")
-  res.send(cleanedHtml)
+  res.send({
+    blocks: contents,
+    html: cleanedHtml,
+  })
 }
