@@ -1,9 +1,5 @@
 import { Client } from "@notionhq/client"
-import { NotionBlocksHtmlParser } from '@notion-stuff/blocks-html-parser'
-// import { NotionBlocksMarkdownParser } from '@notion-stuff/blocks-markdown-parser'
-
-// const instance = NotionBlocksMarkdownParser.getInstance()
-const instance = NotionBlocksHtmlParser.getInstance()
+import potion from '../../potion/api/html'
 
 const notion = new Client({ auth: process.env.NOTION_TOKEN })
 
@@ -12,17 +8,23 @@ const notion = new Client({ auth: process.env.NOTION_TOKEN })
 
 
 
-async function getChildren(blockId){
+async function parseBlock(blockId, depth = 0, output = []){
 	const blockRes = await notion.blocks.children.list({
 	  block_id: blockId,
 	}).catch(err => {throw err})
 	const blocks = blockRes.results
 	for(let block of blocks){
+		console.log(`block`, JSON.stringify(block, null, 3))
+
+		// Add line to output
+		output.push(blockToMarkdown(block, depth))
+
 		if(block.has_children){
-			block[block.type].children = await getChildren(block.id).catch(err => {throw err})
+			await parseBlock(block.id, depth + 1, output)
+				.catch(err => {throw err})
 		}
 	}
-	return blocks
+	return output
 }
 
 
@@ -33,13 +35,11 @@ async function getChildren(blockId){
 		// console.log(`pageRes`, JSON.stringify(pageRes, null, 3))
 
 
-		const blockRes = await getChildren(pageId).catch(err => {throw err})
-		console.log(`blockRes`, JSON.stringify(blockRes, null, 3))
+		const output = await parseBlock(pageId).catch(err => {throw err})
+		console.log(`OUTPUT:\n`, output.join(`\n`))
 
 
-		const markdown = instance.parse(blockRes)
 
-		console.log(`markdown`, markdown)
 
 
   }
@@ -47,3 +47,69 @@ async function getChildren(blockId){
     console.error(error)
   }
 }()
+
+
+function blockToMarkdown(block, depth){
+	let tabs = ``
+	for(let i = depth; i--;){
+		tabs += `\t`
+	}
+
+	const { type } = block
+	if(type === `paragraph`){
+		return tabs + parseText(block.paragraph.text)
+	}
+	else{
+		// console.log(`block`, JSON.stringify(block, null, 3))
+		console.log(`UNKNOWN TYPE:`, type)
+	}
+
+
+	return tabs + block.id
+}
+
+function parseText(items){
+	const text = []
+	for(let item of items){
+		const parsedTextItem = parseTextItem(item)
+		text.push(parsedTextItem)
+	}
+	const str = text.join(``)
+	return str
+}
+
+function parseTextItem(item){
+	// TODO: Equations
+	if(item.type === `equation`){
+		return item.equation.expression
+	}
+
+	// Regularly text
+	let str = ``
+	if(item.href){
+		str = `[${item.text.content}](${item.href})`
+	}
+	else{
+		str = item.text.content
+	}
+	const styles = item.annotations
+	if(styles.bold){
+		str = `**${str}**`
+	}
+	if(styles.italic){
+		str = `*${str}*`
+	}
+	if(styles.strikethrough){
+		str = `~~${str}~~`
+	}
+	if(styles.underline){
+		str = `<ins>${str}</ins>`
+	}
+	if(styles.code){
+		str = '`' + str + '`'
+	}
+	if(styles.color && styles.color !== `default`){
+		str = `<span style="color:${styles.color}">${str}</span>`
+	}
+	return str
+}
