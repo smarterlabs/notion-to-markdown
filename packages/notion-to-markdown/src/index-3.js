@@ -97,15 +97,48 @@ function indentLines(str){
 
 const group = [
 	`numbered_list`,
+	`bulleted_list`,
 	`to_do`,
 ]
+
+function formatText(block){
+	const parts = get(block, `properties.title`, [])
+	let mdStr = ``
+	for(let part of parts){
+		let [value, formatting] = part
+		// Loop through formatting instructions
+		formatting = (formatting || []).map(f => {
+			const format = f[0]
+			if(format === `b`){
+				value = `**${value}**`
+			}
+			else if(format === `i`){
+				value = `*${value}*`
+			}
+			else if(format === `u`){
+				value = `_${value}_`
+			}
+			else if(format === `s`){
+				value = `~~${value}~~`
+			}
+			else if(format === `c`){
+				value = `\`${value}\``
+			}
+			else if(format === `a`){
+				value = `[${value}](${f[1]})`
+			}
+		})
+		mdStr += value
+	}
+	return mdStr
+}
 
 function blocksToMarkdown(blocks, previousBlockType){
 	let str = ``
 
 	for(let block of blocks){
 		const { type } = block
-		const text = get(block, `properties.title`, ``)
+		const text = formatText(block)
 
 		if(previousBlockType !== type || group.indexOf(type) === -1){
 			str += `\n\n`
@@ -118,6 +151,9 @@ function blocksToMarkdown(blocks, previousBlockType){
 		if(type === `numbered_list`){
 			str += `1. ${text}`
 		}
+		else if(type === `bulleted_list`){
+			str += `- ${text}`
+		}
 		else if(type === `to_do`){
 			str += `- [ ] ${text}`
 		}
@@ -128,13 +164,22 @@ function blocksToMarkdown(blocks, previousBlockType){
 			str += `___`
 		}
 		else if(type === `callout`){
-			str += `> ${text}`
+			str += `:::note\n${text}\n:::`
 		}
 		else if(type === `text`){
+			if(text){
+				console.log(`text block`, JSON.stringify(block, null, 2))
+			}
 			str += text
 		}
-		else if(type === `sub_sub_header`){
+		else if(type === `header`){
 			str += `# ${text}`
+		}
+		else if(type === `sub_header`){
+			str += `## ${text}`
+		}
+		else if(type === `sub_sub_header`){
+			str += `### ${text}`
 		}
 		else if(type === `equation`){
 			str += `$$${text}$$`
