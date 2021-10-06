@@ -1,8 +1,8 @@
-// import notion from 'notion-markdown'
 import fetch from 'node-fetch'
- 
-// https://smarterlabs.notion.site/Simple-Page-Text-2-614911ed1cc148818c5c33968e9f8dd9
+import get from 'lodash/get.js'
+import fs from 'fs-extra'
 
+// https://smarterlabs.notion.site/Simple-Page-Text-2-614911ed1cc148818c5c33968e9f8dd9
 
 function normalizeId(id){
 	if(!id) return id
@@ -24,9 +24,8 @@ function call(methodName, body){
 	})
 }
 
-async function getPage(id){
+async function getPageBlocks(id){
 	id = normalizeId(id)
-	console.log(`Getting page:`, id)
 
 	const overview = await call("syncRecordValues", {
 		requests: [
@@ -78,7 +77,7 @@ async function getPage(id){
 		if(block) {
 			block = block.value
 			if(block.content){
-				block.content = await getPage(block.id)
+				block.content = await getPageBlocks(block.id)
 			}
 			contents.push(block)
 		}
@@ -89,8 +88,98 @@ async function getPage(id){
 
 }
 
-getPage(`614911ed1cc148818c5c33968e9f8dd9`).then(contents => {
-	console.log(`contents`, JSON.stringify(contents, null, 3))
+function indentLines(str){
+	return str.split(`\n`).map(line => {
+		if(!line) return ``
+		return `\t` + line
+	}).join(`\n`)
+}
+
+const group = [
+	`numbered_list`,
+	`to_do`,
+]
+
+function blocksToMarkdown(blocks, previousBlockType){
+	let str = ``
+
+	for(let block of blocks){
+		const { type } = block
+		const text = get(block, `properties.title`, ``)
+
+		if(previousBlockType !== type || group.indexOf(type) === -1){
+			str += `\n\n`
+		}
+		else{
+			str += `\n`
+		}
+
+		// Content types
+		if(type === `numbered_list`){
+			str += `1. ${text}`
+		}
+		else if(type === `to_do`){
+			str += `- [ ] ${text}`
+		}
+		else if(type === `quote`){
+			str += `> ${text}`
+		}
+		else if(type === `divider`){
+			str += `___`
+		}
+		else if(type === `callout`){
+			str += `> ${text}`
+		}
+		else if(type === `text`){
+			str += text
+		}
+		else if(type === `sub_sub_header`){
+			str += `# ${text}`
+		}
+		else if(type === `equation`){
+			str += `$$${text}$$`
+		}
+		else if(type === `toggle`){
+			str += `- ${text}`
+		}
+		else if(type === `image`){
+			const caption = get(block, `properties.caption`, ``)
+			const source = get(block, `properties.source`, ``)
+			str += `![${caption}](${source})`
+		}
+		else if(type === `code`){
+			const language = get(block, `properties.language`, ``)
+			str += `\`\`\`${language}\n${text}\n\`\`\``
+		}
+		else{
+			console.log(`Unknown block type:`, type, JSON.stringify(block, null, 3))
+		}
+
+
+		if(block.content){
+			let childrenMarkdown = blocksToMarkdown(block.content, type)
+			str += indentLines(childrenMarkdown)
+		}
+		previousBlockType = type
+	}
+	
+	// Compact multiple returns
+	str = str.replace(/\n\n\n/g, `\n`)
+
+	return str
+}
+
+async function pageToMarkdown(pageId){
+	const blocks = await getPageBlocks(pageId)
+	const markdown = blocksToMarkdown(blocks)
+
+	await fs.outputFile(`output.md`, markdown)
+	return markdown
+}
+
+
+pageToMarkdown(`614911ed1cc148818c5c33968e9f8dd9`).then(markdown => {
+	console.log(`markdown`, markdown)
 }).catch(err => {
 	console.error(err)
 	process.exit(1)
