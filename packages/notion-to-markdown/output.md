@@ -1,15 +1,32 @@
 
 
-1. Testando uma lista numerada
-1. Continuando
-1. Aquii também
-1. 
+# H1
 
-> Testando agora um quote da vida
+## H2
+
+### H3
+
+1. Numbered list 1
+1. Numbered list 2
+1. Numbered list 3
+	1. Numbered sub list 1
+	1. Numbered sub list 2
+
+- Bulleted list 1
+- Bulleted list 2
+	- Sub bulleted list 1
+
+- [ ] Task 1
+	- [ ] Sub task
+- [ ] Task 2
+
+> This is a quote
 
 ___
 
-> EPA Lá!
+:::note
+This is an admonition.
+:::
 
 ```JavaScript
 function teste() {
@@ -20,35 +37,13 @@ function teste() {
 
 ![Isso é um caption](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/25fe4fff-0714-4dfc-92bf-add5292e9128/Untitled.png)
 
-⁍,e,2x = 2, é uma equação
+⁍ é uma equação
 
-Isso aqui é uma ,integral,a,https://www.youtube.com/
+Isso aqui é uma [integral](https://www.youtube.com/)
 
 $$\int_1^2 2xdx$$
 
-> ESSA PARADA É MUITO IMPORTANTE., LINK DA AVÓ,a,https://www.google.com.br/
+This is a ~~**bold strikethrough**~~
 
-- Isso aqui é um toggle
+	`Inlined code`
 
-	Ai tem alguma coisa dentro
-
-Isso é ,pafadfafda,s
-
-	fadfdafaddfaf,c
-
-Mais um teste!
-
-Mais um teste!
-
-1. afaDfad
-1. afdafad
-1. afddfadfa
-	1. sub-bullet
-	1. fadfdafa
-
-# MY h1
-
-- [ ] fadfafaf ,fdafdfa,b, dfafda 
-- [ ] fdafdafa
-- [ ] fdafdafa
-	- [ ] Sub to-do
