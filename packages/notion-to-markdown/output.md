@@ -37,11 +37,11 @@ function teste() {
 
 ![Isso é um caption](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/25fe4fff-0714-4dfc-92bf-add5292e9128/Untitled.png)
 
-⁍ é uma equação
-
 Isso aqui é uma [integral](https://www.youtube.com/)
 
-$$\int_1^2 2xdx$$
+$$
+\int_1^2 2xdx
+$$
 
 This is a ~~**bold strikethrough**~~
 

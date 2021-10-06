@@ -182,7 +182,7 @@ function blocksToMarkdown(blocks, previousBlockType){
 			str += `### ${text}`
 		}
 		else if(type === `equation`){
-			str += `$$${text}$$`
+			str += `$$\n${text}\n$$`
 		}
 		else if(type === `toggle`){
 			str += `- ${text}`
