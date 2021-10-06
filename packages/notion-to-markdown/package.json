@@ -4,7 +4,9 @@
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "build": "dotenv -e ../../.env -- node src/index-4",
+    "dev": "yarn build",
+    "build": "dotenv -e ../../.env -- node src/index-3",
+    "start": "yarn build",
     "serve": "serve dist"
   },
   "dependencies": {
