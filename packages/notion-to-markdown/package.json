@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "yarn build",
-    "build": "dotenv -e ../../.env -- node src/index-3",
+    "build": "dotenv -e ../../.env -- node src/index",
     "start": "yarn build",
     "serve": "serve dist"
   },

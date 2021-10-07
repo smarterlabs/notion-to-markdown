@@ -10,6 +10,7 @@
     "start": "dotenv -e ./.env -- node packages/notion-to-markdown/src/index.js",
     "serve": "serve dist",
     "stop": "sudo killall -9 node",
+    "lint": "eslint --fix",
     "version": "lerna version"
   },
   "husky": {
