@@ -7,7 +7,7 @@ const group = [
 	`bulleted_list`,
 	`to_do`,
 ]
-export default function blocksToMarkdown(blocks, previousBlockType){
+export default async function blocksToMarkdown(blocks, previousBlockType){
 	let str = ``
 
 	for(let block of blocks){
@@ -62,8 +62,13 @@ export default function blocksToMarkdown(blocks, previousBlockType){
 			str += `- ${text}`
 		}
 		else if(type === `image`){
+			console.log(`image block`, JSON.stringify(block, null, 3))
 			const caption = get(block, `properties.caption`, ``)
-			const source = get(block, `properties.source`, ``)
+			let source = get(block, `properties.source`, ``)
+
+			// TODO: URL from API is private, so we need to recreate the public URL
+			// let publicSource = ``
+
 			str += `![${caption}](${source})`
 		}
 		else if(type === `code`){
@@ -80,7 +85,7 @@ export default function blocksToMarkdown(blocks, previousBlockType){
 
 
 		if(block.content && type !== `page`){
-			let childrenMarkdown = blocksToMarkdown(block.content, type)
+			let childrenMarkdown = await blocksToMarkdown(block.content, type)
 			str += indentLines(childrenMarkdown)
 		}
 		previousBlockType = type

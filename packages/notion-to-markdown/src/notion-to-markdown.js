@@ -3,7 +3,7 @@ import getPageBlocks from './get-page-blocks.js'
 import blocksToMarkdown from './blocks-to-markdown.js'
 import slugify from 'slug'
 
-function parseBlocks(blocks, markdown = [], pageIds = [], structure = [], depth = []) {
+async function parseBlocks(blocks, markdown = [], pageIds = [], structure = [], depth = []) {
 	for(let block of blocks){
 		if(block.type == `page` && !pageIds.includes(block.id)){
 			// console.log(`page block`, JSON.stringify(block, null, 2))
@@ -13,7 +13,7 @@ function parseBlocks(blocks, markdown = [], pageIds = [], structure = [], depth 
 			let dir = depth.length ? `${depth.join(`/`)}/` : ``
 			if(dir === `/`) dir = ``
 			const path = `${dir}${slug}`
-			const str = blocksToMarkdown(block.content)
+			const str = await blocksToMarkdown(block.content)
 
 			let hasChildren
 			for(let child of block.content){
@@ -45,15 +45,6 @@ function parseBlocks(blocks, markdown = [], pageIds = [], structure = [], depth 
 					items,
 				})
 			}
-			structure[block.id] = {
-				// title,
-				// slug,
-				// dir,
-				// path,
-				// blocks: {},
-				// hasContent: !!str,
-				
-			}
 			markdown.push({
 				title,
 				slug,
@@ -67,7 +58,7 @@ function parseBlocks(blocks, markdown = [], pageIds = [], structure = [], depth 
 			// Parse contents
 			if(block.content){
 				const currentDepth = [...depth, slug]
-				parseBlocks(block.content, markdown, pageIds, items, currentDepth)
+				await parseBlocks(block.content, markdown, pageIds, items, currentDepth)
 			}
 		}
 	}
@@ -77,7 +68,7 @@ function parseBlocks(blocks, markdown = [], pageIds = [], structure = [], depth 
 export default async function pageToMarkdown(pageId){
 	const blocks = await getPageBlocks(pageId)
 
-	const { markdown, structure } = parseBlocks(blocks)
+	const { markdown, structure } = await parseBlocks(blocks)
 
 	return { markdown, structure }
 }
