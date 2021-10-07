@@ -41,9 +41,9 @@ export default function blocksToMarkdown(blocks, previousBlockType){
 			str += `:::note\n${text}\n:::`
 		}
 		else if(type === `text`){
-			if(text){
-				console.log(`text block`, JSON.stringify(block, null, 2))
-			}
+			// if(text){
+			// 	console.log(`text block`, JSON.stringify(block, null, 2))
+			// }
 			str += text
 		}
 		else if(type === `header`){
@@ -79,7 +79,7 @@ export default function blocksToMarkdown(blocks, previousBlockType){
 		}
 
 
-		if(block.content){
+		if(block.content && type !== `page`){
 			let childrenMarkdown = blocksToMarkdown(block.content, type)
 			str += indentLines(childrenMarkdown)
 		}

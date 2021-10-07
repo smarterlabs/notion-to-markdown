@@ -3,32 +3,71 @@ import getPageBlocks from './get-page-blocks.js'
 import blocksToMarkdown from './blocks-to-markdown.js'
 import slugify from 'slug'
 
-function parseBlocks(blocks, markdown = [], pageIds = [], structure = {}, depth = []) {
+function parseBlocks(blocks, markdown = [], pageIds = [], structure = [], depth = []) {
 	for(let block of blocks){
 		if(block.type == `page` && !pageIds.includes(block.id)){
-			console.log(`page block`, JSON.stringify(block, null, 2))
+			// console.log(`page block`, JSON.stringify(block, null, 2))
 			pageIds.push(block.id)
 			const title = get(block, `properties.title[0][0]`)
 			const slug = slugify(title)
-			const dir = depth.length ? depth.join(`/`) : ``
-			const path = `/${dir}/${slug}`
+			let dir = depth.length ? `${depth.join(`/`)}/` : ``
+			if(dir === `/`) dir = ``
+			const path = `${dir}${slug}`
+			const str = blocksToMarkdown(block.content)
+
+			let hasChildren
+			for(let child of block.content){
+				if(child.type == `page`){
+					hasChildren = true
+					break
+				}
+			}
+
+			let items = []
+			if(!hasChildren){
+				structure.push({
+					type: `doc`,
+					id: path,
+					label: title,
+				})
+			}
+			else{
+				if(str){
+					items.push({
+						type: `doc`,
+						id: path,
+						label: title,
+					})
+				}
+				structure.push({
+					type: `category`,
+					label: title,
+					items,
+				})
+			}
 			structure[block.id] = {
-				title,
-				slug,
-				dir,
-				path,
-				blocks: {},
+				// title,
+				// slug,
+				// dir,
+				// path,
+				// blocks: {},
+				// hasContent: !!str,
+				
 			}
 			markdown.push({
 				title,
 				slug,
 				dir,
 				path,
-				markdown: blocksToMarkdown(block.content),
+				markdown: str,
+				hasChildren: !!(block.content && block.content.length),
 			})
+
+			
+			// Parse contents
 			if(block.content){
 				const currentDepth = [...depth, slug]
-				parseBlocks(block.content, markdown, pageIds, structure[block.id].blocks, currentDepth)
+				parseBlocks(block.content, markdown, pageIds, items, currentDepth)
 			}
 		}
 	}
