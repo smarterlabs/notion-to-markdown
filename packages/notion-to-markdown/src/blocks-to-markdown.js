@@ -70,6 +70,10 @@ export default function blocksToMarkdown(blocks, previousBlockType){
 			const language = get(block, `properties.language`, ``)
 			str += `\`\`\`${language}\n${text}\n\`\`\``
 		}
+		// Ignore pages
+		else if(type === `page`){
+			str += `\n`
+		}
 		else{
 			console.log(`Unknown block type:`, type, JSON.stringify(block, null, 3))
 		}
@@ -83,7 +87,7 @@ export default function blocksToMarkdown(blocks, previousBlockType){
 	}
 	
 	// Compact multiple returns
-	str = str.replace(/\n\n\n/g, `\n`)
+	str = str.replace(/\n\n\n/g, `\n`).trim()
 
 	return str
 }

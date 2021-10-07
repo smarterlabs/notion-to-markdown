@@ -5,6 +5,7 @@
   "author": "Kennedy Rose <kennedyianrose@gmail.com>",
   "private": true,
   "scripts": {
+    "dev": "cd packages/notion-to-markdown && yarn dev",
     "build": "yarn run clean && cd packages/orchestration && dotenv -e ../../.env -- npm run build",
     "clean": "del dist",
     "start": "dotenv -e ./.env -- node packages/notion-to-markdown/src/index.js",
