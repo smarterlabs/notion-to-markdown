@@ -20,7 +20,8 @@
     "node-fetch": "^3.0.0",
     "notion-content-render": "^1.0.0",
     "notion-markdown": "^0.0.1",
-    "notion-to-markdown": "^1.8.0"
+    "notion-to-markdown": "^1.8.0",
+    "slug": "^5.1.0"
   },
   "devDependencies": {
     "del-cli": "^4.0.0",
