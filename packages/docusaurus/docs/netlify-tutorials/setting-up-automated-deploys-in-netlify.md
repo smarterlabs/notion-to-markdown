@@ -1,3 +1,5 @@
+# Setting Up Automated Deploys in Netlify
+
 **Note:** This step is optional. You only have to do this if you want your Netlify site to stay in sync with your Webflow site.
 
 After your website has been deployed to Netlify, follow these steps to automatically sync your Netlify's site with your Webflow site every time it publishes:

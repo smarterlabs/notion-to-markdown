@@ -13,7 +13,7 @@ async function notionToMarkdown(blocks, origin, markdown = [], pageIds = [], str
 			let dir = depth.length ? `${depth.join(`/`)}/` : ``
 			if(dir === `/`) dir = ``
 			const path = `${dir}${slug}`
-			const str = await blocksToMarkdown(block.content, origin)
+			let str = await blocksToMarkdown(block.content, origin)
 
 			let hasChildren
 			for(let child of block.content){
@@ -45,12 +45,14 @@ async function notionToMarkdown(blocks, origin, markdown = [], pageIds = [], str
 					items,
 				})
 			}
+
+			const strWithTitle = `# ${title}\n\n${str}`
 			markdown.push({
 				title,
 				slug,
 				dir,
 				path,
-				markdown: str,
+				markdown: strWithTitle,
 				hasChildren: !!(block.content && block.content.length),
 			})
 

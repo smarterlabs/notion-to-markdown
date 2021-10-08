@@ -1,3 +1,5 @@
+# Setting Up Automated Deploys in Vercel
+
 **Note:** This step is optional. You only have to do this if you want your Vercel site to stay in sync with your Webflow site.
 
 After your website has been deployed to Vercel, follow these steps to automatically sync your Vercel site with your Webflow site every time it publishes:

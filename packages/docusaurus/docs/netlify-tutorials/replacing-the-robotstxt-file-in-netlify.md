@@ -1,3 +1,5 @@
+# Replacing the robots.txt File in Netlify
+
 Some users prefer to hide their Webflow site from search engines. If this option is turned on, CryoLayer will also hide the Vercel site since it copies the same robots.txt file. Follow these instructions to allow robots on your Vercel site while keeping your Webflow site hidden.
 
 1. In your Netlify site's dashboard, click the "Site settings" tab.

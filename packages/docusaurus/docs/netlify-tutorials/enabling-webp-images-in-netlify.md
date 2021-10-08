@@ -1,3 +1,5 @@
+# Enabling WebP Images in Netlify
+
 Since CryoLayer needs to modify HTML to support WebP images, this can sometimes negatively affect styles on some sites. This is why we turn this feature off by default. Follow these instructions to turn on WebP images.
 
 1. In your Netlify site's dashboard, click the "Site settings" tab.

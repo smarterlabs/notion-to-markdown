@@ -1,3 +1,5 @@
+# Enabling Inlined Critical CSS in Vercel
+
 Since CryoLayer needs to modify HTML to support inlined CSS, this can sometimes negatively affect styles on some sites. This is why we turn this feature off by default. Follow these instructions to turn on inlined critical CSS.
 
 1. In your Vercel site's dashboard, click the site's "Settings" tab.

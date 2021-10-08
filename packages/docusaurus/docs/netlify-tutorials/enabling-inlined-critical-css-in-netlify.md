@@ -1,3 +1,5 @@
+# Enabling Inlined Critical CSS in Netlify
+
 Since CryoLayer needs to modify HTML to support inlining critical CSS, this can sometimes negatively affect styles on some sites. This is why we turn this feature off by default. Follow these instructions to turn on inlining critical CSS.
 
 1. In your Netlify site's dashboard, click the "Site settings" tab.

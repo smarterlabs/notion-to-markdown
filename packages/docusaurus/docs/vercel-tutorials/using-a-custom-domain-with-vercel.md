@@ -1,3 +1,5 @@
+# Using a Custom Domain with Vercel
+
 After you've deployed your site to Vercel, you'll want your custom domain to point to the Vercel site, not the Webflow one. You may do this in the Vercel dashboard.
 
 1. In the Vercel dashboard for your new site, click on your site's "Settings" tab.

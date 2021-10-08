@@ -1,3 +1,5 @@
+# Removing Websites in Vercel
+
 To remove a website from Vercel:
 
 1. Go into your website settings in Vercel.

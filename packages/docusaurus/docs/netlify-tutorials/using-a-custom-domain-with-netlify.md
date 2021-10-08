@@ -1,3 +1,5 @@
+# Using a Custom Domain with Netlify
+
 After you've deployed your site to Netlify, you'll want your custom domain to point to the Netlify site, not the Webflow one. You may do this in the Netlify dashboard.
 
 1. In the Netlify dashboard for your new site, click on "Site settings"

@@ -64,15 +64,27 @@ export default async function blocksToMarkdown(blocks, origin, previousBlockType
 			str += `- ${text}`
 		}
 		else if(type === `image`){
-			console.log(`image block`, JSON.stringify(block, null, 3))
+			// console.log(`image block`, JSON.stringify(block, null, 3))
 			const caption = get(block, `properties.caption`, ``)
 			let source = get(block, `properties.source`, ``)
 
 			// URL from API is private, so we need to recreate the public URL
-			const info = get(block, `format.copied_from_pointer`, {})
+			const format = block.format || {}
+			const info = format.copied_from_pointer || {}
 			let publicSource = `https://${origin}/image/${urlencode(source)}?table=${info.table}&id=${block.id}&spaceId=${info.spaceId}`
 
-			str += `![${caption}](${publicSource})`
+			const w = format.block_width
+			const h = format.block_height
+			const style = {
+				marginLeft: `auto`,
+				marginRight: `auto`,
+				width: w,
+				height: h,
+				maxWidth: `100%`,
+			}
+			str += `<p style={${JSON.stringify(style)}}><img src="${publicSource}" alt="${caption}" /></p>
+			`
+			// str += `![${caption}](${publicSource})`
 		}
 		else if(type === `code`){
 			const language = get(block, `properties.language`, ``)
