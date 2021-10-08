@@ -3,7 +3,7 @@ import getPageBlocks from './get-page-blocks.js'
 import blocksToMarkdown from './blocks-to-markdown.js'
 import slugify from 'slug'
 
-async function parseBlocks(blocks, markdown = [], pageIds = [], structure = [], depth = []) {
+async function notionToMarkdown(blocks, origin, markdown = [], pageIds = [], structure = [], depth = []) {
 	for(let block of blocks){
 		if(block.type == `page` && !pageIds.includes(block.id)){
 			// console.log(`page block`, JSON.stringify(block, null, 2))
@@ -13,7 +13,7 @@ async function parseBlocks(blocks, markdown = [], pageIds = [], structure = [], 
 			let dir = depth.length ? `${depth.join(`/`)}/` : ``
 			if(dir === `/`) dir = ``
 			const path = `${dir}${slug}`
-			const str = await blocksToMarkdown(block.content)
+			const str = await blocksToMarkdown(block.content, origin)
 
 			let hasChildren
 			for(let child of block.content){
@@ -58,17 +58,17 @@ async function parseBlocks(blocks, markdown = [], pageIds = [], structure = [], 
 			// Parse contents
 			if(block.content){
 				const currentDepth = [...depth, slug]
-				await parseBlocks(block.content, markdown, pageIds, items, currentDepth)
+				await notionToMarkdown(block.content, origin, markdown, pageIds, items, currentDepth)
 			}
 		}
 	}
 	return { markdown, structure }
 }
 
-export default async function pageToMarkdown(pageId){
+export default async function pageToMarkdown(pageId, origin){
 	const blocks = await getPageBlocks(pageId)
 
-	const { markdown, structure } = await parseBlocks(blocks)
+	const { markdown, structure } = await notionToMarkdown(blocks, origin)
 
 	return { markdown, structure }
 }

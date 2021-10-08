@@ -1,13 +1,15 @@
 import get from 'lodash/get.js'
 import indentLines from './indent-lines.js'
 import formatText from './format-text.js'
+import urlencode from "urlencode"
+
 
 const group = [
 	`numbered_list`,
 	`bulleted_list`,
 	`to_do`,
 ]
-export default async function blocksToMarkdown(blocks, previousBlockType){
+export default async function blocksToMarkdown(blocks, origin, previousBlockType){
 	let str = ``
 
 	for(let block of blocks){
@@ -66,10 +68,11 @@ export default async function blocksToMarkdown(blocks, previousBlockType){
 			const caption = get(block, `properties.caption`, ``)
 			let source = get(block, `properties.source`, ``)
 
-			// TODO: URL from API is private, so we need to recreate the public URL
-			// let publicSource = ``
+			// URL from API is private, so we need to recreate the public URL
+			const info = get(block, `format.copied_from_pointer`, {})
+			let publicSource = `https://${origin}/image/${urlencode(source)}?table=${info.table}&id=${block.id}&spaceId=${info.spaceId}`
 
-			str += `![${caption}](${source})`
+			str += `![${caption}](${publicSource})`
 		}
 		else if(type === `code`){
 			const language = get(block, `properties.language`, ``)
@@ -85,7 +88,7 @@ export default async function blocksToMarkdown(blocks, previousBlockType){
 
 
 		if(block.content && type !== `page`){
-			let childrenMarkdown = await blocksToMarkdown(block.content, type)
+			let childrenMarkdown = await blocksToMarkdown(block.content, origin, type)
 			str += indentLines(childrenMarkdown)
 		}
 		previousBlockType = type

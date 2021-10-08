@@ -8,8 +8,12 @@ import { outputFile } from 'fs-extra'
 const markdownDist = `../docusaurus/docs`
 const structureDist = `../docusaurus/structure.js`
 
-async function notionSiteToMarkdown(notionId){
-	let { structure, markdown } = await notionToMarkdown(notionId)
+async function notionSiteToMarkdown(url){
+	const parsed = new URL(url)
+	const host = parsed.host
+	
+	const notionId = url.split(`-`).pop()
+	let { structure, markdown } = await notionToMarkdown(notionId, host)
 
 	// Write files
 	for(let file of markdown){
@@ -17,13 +21,11 @@ async function notionSiteToMarkdown(notionId){
 		await outputFile(markdownPath, file.markdown)
 	}
 
-	console.log(`structure`, JSON.stringify(structure, null, 2))
-
 	// Write Docusaurus sidebars.js file
 	await outputFile(structureDist, `module.exports = ${JSON.stringify(structure, null, 3)}`)
 }
 
-notionSiteToMarkdown(`acbce2c61d464deeb16ffc3b865009d3`).catch(err => {
+notionSiteToMarkdown(`https://smarterlabs.notion.site/CryoLayer-Documentation-acbce2c61d464deeb16ffc3b865009d3`).catch(err => {
 	console.error(err)
 	process.exit(1)
 })
