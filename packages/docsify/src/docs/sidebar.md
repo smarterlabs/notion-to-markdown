@@ -1,0 +1,18 @@
+- Vercel Tutorials
+	- [Setting Up a New Vercel Website](vercel-tutorials/setting-up-a-new-vercel-website)
+	- [Setting Up Automated Deploys in Vercel](vercel-tutorials/setting-up-automated-deploys-in-vercel)
+	- [Using a Custom Domain with Vercel](vercel-tutorials/using-a-custom-domain-with-vercel)
+	- [Removing Websites in Vercel](vercel-tutorials/removing-websites-in-vercel)
+	- [Enabling WebP Images in Vercel](vercel-tutorials/enabling-webp-images-in-vercel)
+	- [Enabling Inlined Critical CSS in Vercel](vercel-tutorials/enabling-inlined-critical-css-in-vercel)
+	- [Replacing the robots.txt File in Vercel](vercel-tutorials/replacing-the-robotstxt-file-in-vercel)
+- Netlify Tutorials
+	- [Setting Up a New Netlify Website](netlify-tutorials/setting-up-a-new-netlify-website)
+	- [Setting Up Automated Deploys in Netlify](netlify-tutorials/setting-up-automated-deploys-in-netlify)
+	- [Using a Custom Domain with Netlify](netlify-tutorials/using-a-custom-domain-with-netlify)
+	- [Removing Websites in Netlify](netlify-tutorials/removing-websites-in-netlify)
+	- [Enabling WebP Images in Netlify](netlify-tutorials/enabling-webp-images-in-netlify)
+	- [Enabling Inlined Critical CSS in Netlify](netlify-tutorials/enabling-inlined-critical-css-in-netlify)
+	- [Replacing the robots.txt File in Netlify](netlify-tutorials/replacing-the-robotstxt-file-in-netlify)
+- [Excluding Pages From the Sitemap](excluding-pages-from-the-sitemap)
+- [Upgrading Your License](upgrading-your-license)

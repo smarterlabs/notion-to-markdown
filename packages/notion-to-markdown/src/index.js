@@ -5,8 +5,30 @@ import { outputFile } from 'fs-extra'
 // https://smarterlabs.notion.site/Simple-Page-Text-2-614911ed1cc148818c5c33968e9f8dd9
 // https://smarterlabs.notion.site/CryoLayer-Documentation-acbce2c61d464deeb16ffc3b865009d3
 
-const markdownDist = `../docusaurus/docs`
-const structureDist = `../docusaurus/structure.js`
+const markdownDist = `../docsify/src/docs`
+const structureDist = `../docsify/src/sidebar.md`
+
+function structureToMarkdown(structure){
+	let str = []
+	for(let link of structure){
+		if(!link.id){
+			str.push(`- ${link.label}`)
+		}
+		else{
+			str.push(`- [${link.label}](${link.id})`)
+		}
+		if(link.items){
+			let lines = structureToMarkdown(link.items).split(`\n`).map(line => {
+				return `\t${line}`
+			})
+			str = [
+				...str,
+				...lines,
+			]
+		}
+	}
+	return str.join(`\n`)
+}
 
 async function notionSiteToMarkdown(url){
 	const parsed = new URL(url)
@@ -22,7 +44,8 @@ async function notionSiteToMarkdown(url){
 	}
 
 	// Write Docusaurus sidebars.js file
-	await outputFile(structureDist, `module.exports = ${JSON.stringify(structure, null, 3)}`)
+	const sidebarMarkdown = structureToMarkdown(structure)
+	await outputFile(structureDist, sidebarMarkdown)
 }
 
 notionSiteToMarkdown(`https://smarterlabs.notion.site/CryoLayer-Documentation-acbce2c61d464deeb16ffc3b865009d3`).catch(err => {
